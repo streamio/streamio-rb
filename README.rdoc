@@ -1,0 +1,23 @@
+= The Streamio Gem
+
+Official ruby wrapper for the http://streamio.com API. Integrating video in your application has never been more awesome.
+
+== Installation
+
+  gem install streamio
+    
+== Usage
+
+Load it. Configure it. Use it.
+
+  require 'rubygems'
+  require 'streamio'
+  
+  Streamio.configure do |config|
+    config.username = "your_account_name"
+    config.password = "your_api_private_key"
+  end
+  
+  Streamio::Video.all # Fetch an array if videos
+  
+For more details check the RDoc.
