@@ -150,7 +150,7 @@ module Streamio
       end
       
       # This spec passes but only on Ruby 1.9 because of the non random hash order
-      pending "should put accessable attributes when updating" do
+      it "should put accessable attributes when updating" do
         stub_request(:get, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003").
           to_return(:body => File.read("#{fixture_path}/api/videos/show.json"), :status => 200)
         

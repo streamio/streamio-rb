@@ -3,6 +3,7 @@ require "json"
 require "time"
 
 require "streamio/version"
+require "streamio/model"
 require "streamio/video"
 
 module Streamio
