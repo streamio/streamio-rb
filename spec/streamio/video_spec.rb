@@ -111,11 +111,55 @@ module Streamio
         videos = Video.all(:title => "Awesome",  :tags => ["Lördags Party", :symbol], :skip => 2, :limit => 3, :order => "created_at.asc")
         
         videos.length.should == 5
-        videos.first.should be_instance_of(Video)
+        videos.collect(&:class).uniq.should == [Video]
       end
     end
     
     describe "#save" do
+      # This does not work because the Payload is generated differently every time and some strange encoding troubles
+      pending "should post creatable and accessable attributes when persisting" do
+        attributes = { :title => "Title",
+                       :description => "Description",
+                       :file => File.new("#{fixture_path}/awesome.mov"),
+                       :tags => ["some", "tags"],
+                       :encoding_profile_ids => ["id1", "id2"],
+                       :encoding_profile_tags => ["encodings1", "encodings2"],
+                       :use_original_as_transcoding => true,
+                       :image_id => "image1" }
+        
+        stub_request(:post, "#{Streamio.authenticated_api_base}/videos").
+          with(:body => RestClient::Payload.generate(attributes).to_s).
+          to_return(:body => File.read("#{fixture_path}/api/videos/create.json"), :status => 201)
+        
+        attributes[:file] = File.new("#{fixture_path}/awesome.mov")
+        
+        video = Video.new(attributes)
+        video.save
+      end
+      
+      # This spec passes but only on Ruby 1.9 because of the non random hash order
+      pending "should put accessable attributes when updating" do
+        stub_request(:get, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003").
+          to_return(:body => File.read("#{fixture_path}/api/videos/show.json"), :status => 200)
+        
+        @video = Video.find("4b86857fbf4b982ac6000003")
+        
+        attributes = { :title => "New Title",
+                       :description => "New Description",
+                       :tags => ["new", "tags"],
+                       :image_id => "new_id" }
+        
+        attributes.each do |key, value|
+          @video.send("#{key}=", value)
+        end
+        
+        stub_request(:put, "#{Streamio.authenticated_api_base}/videos/#{@video.id}").
+          with(:body => RestClient::Payload.generate(attributes).to_s).
+          to_return(:status => 200)
+          
+        @video.save
+      end
+      
       context "unpersisted with valid attributes" do
         before(:each) do
           stub_request(:post, "#{Streamio.authenticated_api_base}/videos").
@@ -144,6 +188,15 @@ module Streamio
           video.updated_at.to_i.should == 1267107199
           video.plays.should == 0
           video.image_id.should == nil
+        end
+        
+        it "should populate the transcodings array" do
+          video = Video.new
+          video.save
+          
+          video.transcodings.collect do |transcoding|
+            transcoding["id"]
+          end.should == %w(4cea850054129010f3000023 4cea850054129010f3000024)
         end
       end
       
@@ -222,7 +275,7 @@ module Streamio
       
       it "should freeze the attributes" do
         @video.destroy
-        expect { @video.title = "New Title" }.to raise_error(RuntimeError, "can't modify frozen hash")
+        expect { @video.title = "New Title" }.to raise_error("can't modify frozen hash")
       end
       
       it "should be destroyed" do

@@ -14,6 +14,7 @@ module Streamio
         parse_response(resource.get(:params => parameters))
       end
       
+      private
       def parse_response(response)
         response = JSON.parse(response.body)
         if response.instance_of?(Array)
@@ -25,7 +26,6 @@ module Streamio
         end
       end
       
-      private
       def sanitize_parameters(params)
         params.each do |key, value|
           params[key] = value.join(",") if value.instance_of?(Array)
@@ -33,8 +33,9 @@ module Streamio
       end
     end
     
-    ACCESSABLE_ATTRIBUTES = %w(title file description tags image_id)
-    READABLE_ATTRIBUTES = %w(id state progress aspect_ratio_multiplier plays duration created_at updated_at account_id)
+    CREATEABLE_ATTRIBUTES = %w(file encoding_profile_ids encoding_profile_tags skip_default_encoding_profiles use_original_as_transcoding)
+    ACCESSABLE_ATTRIBUTES = %w(title description tags image_id)
+    READABLE_ATTRIBUTES = %w(id state progress aspect_ratio_multiplier plays duration created_at updated_at account_id transcodings)
     
     attr_reader :attributes, :errors
     
@@ -71,13 +72,13 @@ module Streamio
       true
     end
     
-    (ACCESSABLE_ATTRIBUTES + READABLE_ATTRIBUTES).each do |attribute|
+    (CREATEABLE_ATTRIBUTES + ACCESSABLE_ATTRIBUTES + READABLE_ATTRIBUTES).each do |attribute|
       define_method(attribute) do
         @attributes[attribute]
       end
     end
     
-    ACCESSABLE_ATTRIBUTES.each do |attribute|
+    (CREATEABLE_ATTRIBUTES + ACCESSABLE_ATTRIBUTES).each do |attribute|
       define_method("#{attribute}=") do |value|
         @attributes[attribute] = value
       end
@@ -100,7 +101,13 @@ module Streamio
     
     private
     def persist
-      new_attributes = JSON.parse(self.class.resource.post(@attributes).body)
+      parameters = {}
+      (CREATEABLE_ATTRIBUTES + ACCESSABLE_ATTRIBUTES).each do |key|
+        parameters[key] = @attributes[key] if @attributes.has_key?(key)
+      end
+      
+      new_attributes = JSON.parse(self.class.resource.post(attributes).body)
+      
       (ACCESSABLE_ATTRIBUTES + READABLE_ATTRIBUTES).each do |attribute|
         @attributes[attribute] = new_attributes[attribute]
       end
@@ -108,7 +115,12 @@ module Streamio
     end
     
     def update
-      self.class.resource[id].put(@attributes)
+      parameters = {}
+      (ACCESSABLE_ATTRIBUTES).each do |key|
+        parameters[key] = @attributes[key] if @attributes.has_key?(key)
+      end
+      
+      self.class.resource[id].put(parameters)
       true
     end
   end
