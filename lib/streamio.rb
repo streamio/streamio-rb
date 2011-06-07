@@ -5,6 +5,7 @@ require "time"
 require "streamio/version"
 require "streamio/model"
 require "streamio/video"
+require "streamio/image"
 
 module Streamio
   class << self
