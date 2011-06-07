@@ -11,7 +11,11 @@ Gem::Specification.new do |s|
   s.summary     = %q{Ruby wrapper for the Streamio api.}
   s.description = %q{Ruby wrapper for Streamios api.}
 
-  s.files         = Dir.glob("lib/**/*") + %w(Gemfile awesome.gemspec HISTORY README.rdoc)
+  s.files       = Dir.glob("lib/**/*") + %w(Gemfile streamio.gemspec HISTORY README.rdoc)
   
-  s.add_development_dependency("rspec", "~> 2.1.0")
+  s.add_dependency("rest-client", "~> 1.6.1")
+  s.add_dependency("json", ">= 1.4", "< 1.6")
+  
+  s.add_development_dependency("rspec", "~> 2.6.0")
+  s.add_development_dependency("webmock", "~> 1.6.4")
 end
