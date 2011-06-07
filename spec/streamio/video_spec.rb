@@ -22,6 +22,18 @@ module Streamio
         
         video.tags = ["asdf", "qwer"]
         video.tags.should == ["asdf", "qwer"]
+        
+        video.image_id = "imageid"
+        video.image_id.should == "imageid"
+        
+        video.encoding_profile_ids = ["id1", "id2"]
+        video.encoding_profile_ids.should == ["id1", "id2"]
+        
+        video.encoding_profile_tags = ["tag1", "tag2"]
+        video.encoding_profile_tags.should == ["tag1", "tag2"]
+        
+        video.skip_default_encoding_profiles = true
+        video.skip_default_encoding_profiles.should == true
       end
       
       it "should be settable through attributes hash" do
