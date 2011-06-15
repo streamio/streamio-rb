@@ -19,5 +19,19 @@ module Streamio
         @attributes[attribute] = value
       end
     end
+    
+    def add_transcoding(parameters = {})
+      self.class.resource["#{id}/transcodings"].post(parameters)
+      true
+    rescue RestClient::Exception
+      false
+    end
+    
+    def delete_transcoding(transcoding_id)
+      self.class.resource["#{id}/transcodings/#{transcoding_id}"].delete
+      true
+    rescue RestClient::Exception
+      false
+    end
   end
 end

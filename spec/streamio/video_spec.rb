@@ -296,4 +296,79 @@ module Streamio
       end
     end
   end
+  
+  describe "#add_transcoding" do
+    before(:each) do
+      stub_request(:get, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003").
+        to_return(:body => File.read("#{fixture_path}/api/videos/show.json"), :status => 200)
+      @video = Video.find("4b86857fbf4b982ac6000003")
+    end
+    
+    context "with valid parameters" do
+      before(:each) do
+        stub_request(:post, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003/transcodings").
+          to_return(:status => 201)
+      end
+      
+      it "should post to the videos transcodings" do
+        @video.add_transcoding(:encoding_profile_id => "4b86857fbf4b982ac6000004")
+        WebMock.should have_requested(:post, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003/transcodings").
+          with(:body => "encoding_profile_id=4b86857fbf4b982ac6000004").once
+      end
+      
+      it "should be true" do
+        @video.add_transcoding(:encoding_profile_id => "4b86857fbf4b982ac6000004").should === true
+      end
+      
+      it "should reload the video" do
+        
+      end
+    end
+    
+    context "with invalid parameters" do
+      before(:each) do
+        stub_request(:post, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003/transcodings").
+          to_return(:status => 500)
+      end
+      
+      it "should be false" do
+        @video.add_transcoding.should === false
+      end
+    end
+  end
+  
+  describe "#delete_transcoding" do
+    before(:each) do
+      stub_request(:get, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003").
+        to_return(:body => File.read("#{fixture_path}/api/videos/show.json"), :status => 200)
+      @video = Video.find("4b86857fbf4b982ac6000003")
+    end
+    
+    context "with valid parameters" do
+      before(:each) do
+        stub_request(:delete, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003/transcodings/4b86857fbf4b982ac6000004").
+          to_return(:status => 200)
+      end
+      
+      it "should post to the videos transcodings" do
+        @video.delete_transcoding("4b86857fbf4b982ac6000004")
+        WebMock.should have_requested(:delete, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003/transcodings/4b86857fbf4b982ac6000004").once
+      end
+      
+      it "should be true" do
+        @video.delete_transcoding("4b86857fbf4b982ac6000004").should === true
+      end
+    end
+    
+    context "with invalid parameters" do
+      before(:each) do
+        stub_request(:delete, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003/transcodings/4b86857fbf4b982ac6000004").
+          to_return(:status => 500)
+      end
+      
+      it "should be false" do
+        @video.delete_transcoding("4b86857fbf4b982ac6000004").should === false
+      end
+    end
+  end
 end
