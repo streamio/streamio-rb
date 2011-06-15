@@ -8,16 +8,28 @@ Official ruby wrapper for the http://streamio.com API. Integrating video in your
     
 == Usage
 
-Load it. Configure it. Use it.
+Load it.
 
   require 'rubygems'
   require 'streamio'
+  
+Configure it.
   
   Streamio.configure do |config|
     config.username = "your_account_name"
     config.password = "your_api_private_key"
   end
+
+Use it.
+
+  # Fetch an array of videos
+  videos = Streamio::Video.all
   
-  Streamio::Video.all # Fetch an array if videos
+  # Pass in parameters as specified in the API docs
+  # This fetches the 5 most played videos tagged with Nature or Sports
+  videos = Streamio::Video.all(:tags => ["Nature", "Sports"], :limit => 5, :order => "plays.desc")
   
-For more details check the RDoc.
+  # Find a video by id
+  video = Streamio::Video.find("4c57f3975412901427000005")
+  
+Same principles work for the other availible models (Streamio::Image and Streamio::EncodingProfile).
