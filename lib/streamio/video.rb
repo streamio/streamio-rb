@@ -5,7 +5,8 @@ module Streamio
     accessable_attributes %w(title description tags image_id)
     readable_attributes %w(id state progress aspect_ratio_multiplier plays duration created_at updated_at account_id transcodings)
     
-    # Adds a transcoding to the video instance.
+    # Adds a transcoding to the video instance and reloads itself to
+    # reflect the changed transcodings array.
     #
     # @param [Hash] parameters The parameters to pass in when creating the transcoding.
     #
@@ -14,18 +15,21 @@ module Streamio
     # @return [Boolean] Indicating wether the transcoding was successfully created.
     def add_transcoding(parameters)
       self.class.resource["#{id}/transcodings"].post(parameters)
+      reload
       true
     rescue RestClient::Exception
       false
     end
     
-    # Deletes a transcoding from the video.
+    # Deletes a transcoding from the video and reloads itself to
+    # reflect the changed transcodings array.
     #
     # @param [String] transcoding_id The id of the transcoding to be deleted.
     #
     # @return [Boolean] Indicating wether the transcoding was successfully deleted.
     def delete_transcoding(transcoding_id)
       self.class.resource["#{id}/transcodings/#{transcoding_id}"].delete
+      reload
       true
     rescue RestClient::Exception
       false

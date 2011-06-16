@@ -50,8 +50,12 @@ module Streamio
           @video.add_transcoding(:encoding_profile_id => "4b86857fbf4b982ac6000004").should === true
         end
       
-        it "should reload the video" do
-        
+        it "should reload itself" do
+          stub_request(:get, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003").
+            to_return(:body => File.read("#{fixture_path}/api/videos/one_add_transcoding.json"), :status => 200)
+          
+          @video.add_transcoding(:encoding_profile_id => "4b86857fbf4b982ac6000004")
+          @video.transcodings.length.should == 3
         end
       end
     
@@ -76,17 +80,25 @@ module Streamio
     
       context "with valid parameters" do
         before(:each) do
-          stub_request(:delete, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003/transcodings/4b86857fbf4b982ac6000004").
+          stub_request(:delete, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003/transcodings/4cea850054129010f3000024").
             to_return(:status => 200)
         end
       
         it "should post to the videos transcodings" do
-          @video.delete_transcoding("4b86857fbf4b982ac6000004")
-          WebMock.should have_requested(:delete, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003/transcodings/4b86857fbf4b982ac6000004").once
+          @video.delete_transcoding("4cea850054129010f3000024")
+          WebMock.should have_requested(:delete, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003/transcodings/4cea850054129010f3000024").once
         end
       
         it "should be true" do
-          @video.delete_transcoding("4b86857fbf4b982ac6000004").should === true
+          @video.delete_transcoding("4cea850054129010f3000024").should === true
+        end
+        
+        it "should reload itself" do
+          stub_request(:get, "#{Streamio.authenticated_api_base}/videos/4b86857fbf4b982ac6000003").
+            to_return(:body => File.read("#{fixture_path}/api/videos/one_delete_transcoding.json"), :status => 200)
+          
+          @video.delete_transcoding("4cea850054129010f3000024")
+          @video.transcodings.length.should == 1
         end
       end
     
