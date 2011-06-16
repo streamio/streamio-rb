@@ -1,0 +1,14 @@
+{
+  "id": "4c8f810eb35ea84de000000c",
+  "title": "Awesome",
+  "description": "An awesome clip",
+  "created_at": "2010-10-08T08:41:02Z",
+  "updated_at": "2010-10-08T11:25:13Z",
+  "state": "pending",
+  "tags": ["one", "two"],
+  "account_id": "4c8f810eb35ea84de000000e",
+  "transcodings": [
+    { "id": "4cea850054129010f3000023" },
+    { "id": "4cea850054129010f3000024" }
+  ]
+}
