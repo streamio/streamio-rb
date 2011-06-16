@@ -22,7 +22,46 @@ module Streamio
         parse_response(resource.get(:params => parameters))
       end
       
+      def creatable_attributes(attributes = nil)
+        return @creatable_attributes ||= [] if attributes.nil?
+        
+        @creatable_attributes = attributes
+        create_getters(attributes)
+        create_setters(attributes)
+      end
+      
+      def accessable_attributes(attributes = nil)
+        return @accessable_attributes ||= [] if attributes.nil?
+        
+        @accessable_attributes = attributes
+        create_getters(attributes)
+        create_setters(attributes)
+      end
+      
+      def readable_attributes(attributes = nil)
+        return @readable_attributes ||= [] if attributes.nil?
+        
+        @readable_attributes = attributes
+        create_getters(attributes)
+      end
+      
       protected
+      def create_getters(attributes)
+        (attributes - CASTED_ATTRIBUTES).each do |attribute|
+          define_method(attribute) do
+            @attributes[attribute]
+          end
+        end
+      end
+      
+      def create_setters(attributes)
+        attributes.each do |attribute|
+          define_method("#{attribute}=") do |value|
+            @attributes[attribute] = value
+          end
+        end
+      end
+      
       def parse_response(response)
         response = JSON.parse(response.body)
         if response.instance_of?(Array)
@@ -119,7 +158,7 @@ module Streamio
     private
     def update
       parameters = {}
-      (self.class::ACCESSABLE_ATTRIBUTES).each do |key|
+      (self.class.accessable_attributes).each do |key|
         parameters[key] = @attributes[key] if @attributes.has_key?(key)
       end
 
@@ -129,13 +168,13 @@ module Streamio
     
     def persist
       parameters = {}
-      (self.class::CREATEABLE_ATTRIBUTES + self.class::ACCESSABLE_ATTRIBUTES).each do |key|
+      (self.class.creatable_attributes + self.class.accessable_attributes).each do |key|
         parameters[key] = @attributes[key] if @attributes.has_key?(key)
       end
 
       new_attributes = JSON.parse(self.class.resource.post(attributes).body)
 
-      (self.class::ACCESSABLE_ATTRIBUTES + self.class::READABLE_ATTRIBUTES).each do |attribute|
+      (self.class.accessable_attributes + self.class.readable_attributes).each do |attribute|
         @attributes[attribute] = new_attributes[attribute]
       end
       true
