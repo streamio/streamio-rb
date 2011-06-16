@@ -332,7 +332,7 @@ module Streamio
       end
       
       it "should be false" do
-        @video.add_transcoding.should === false
+        @video.add_transcoding({}).should === false
       end
     end
   end

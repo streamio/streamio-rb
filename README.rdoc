@@ -32,4 +32,19 @@ Use it.
   # Find a video by id
   video = Streamio::Video.find("4c57f3975412901427000005")
   
+  # Create a video
+  video = Streamio::Video.new
+  video.save # false
+  video.errors # {:file => ["can't be blank"]}
+  video.file = File.new("my_awesome_video.mov")
+  video.save # true
+
 Same principles work for the other availible models (Streamio::Image and Streamio::EncodingProfile).
+
+== More Documentation
+
+YARDoc is avaible here:
+http://rubydoc.info/gems/streamio
+
+Please refer to the official Streamio API Documentation for details on parameters etc:
+http://streamio.com/api/docs
