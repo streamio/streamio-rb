@@ -278,5 +278,32 @@ module Streamio
         @clip.should be_destroyed
       end
     end
+    
+    describe "#reload" do
+      before(:each) do
+        stub_request(:get, "#{Streamio.authenticated_api_base}/clips/4c8f810eb35ea84de000000c").
+          to_return(:body => File.read("#{fixture_path}/api/clips/one.json"), :status => 200)
+        @clip = Clip.find("4c8f810eb35ea84de000000c")
+
+        stub_request(:get, "#{Streamio.authenticated_api_base}/clips/4c8f810eb35ea84de000000c").
+          to_return(:body => File.read("#{fixture_path}/api/clips/one_reload.json"), :status => 200)
+      end
+      
+      it "should return self" do
+        @clip.reload.should == @clip
+      end
+      
+      it "should update the resource with its remote state" do
+        @clip.reload
+
+        @clip.title.should == "Awesome Changed"
+        @clip.description.should == "A really awesome clip"
+        @clip.updated_at.to_i.should == 1289215513
+        @clip.state.should == "ready"
+        @clip.transcodings.collect do |transcoding|
+          transcoding["id"] 
+        end.should == %w(4cea850054129010f3000023 4cea850054129010f3000024 4cea850054129010f3000025)
+      end
+    end
   end
 end

@@ -133,6 +133,15 @@ module Streamio
       true
     end
     
+    # Update the model instance with the current state on the remote.
+    #
+    # @return [Model] Returns itself.
+    def reload
+      remote = self.class.find(id)
+      @attributes = remote.attributes
+      self
+    end
+    
     # @return [Boolean] True if the record is persisted.
     def persisted?
       !destroyed? && !id.nil?
