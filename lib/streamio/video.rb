@@ -1,9 +1,6 @@
 module Streamio
   class Video < Model
-    def self.resource
-      RestClient::Resource.new("#{Streamio.authenticated_api_base}/videos", :headers => {:accept => :json})
-    end
-    
+    resource_name "videos"
     creatable_attributes %w(file encoding_profile_ids encoding_profile_tags skip_default_encoding_profiles use_original_as_transcoding)
     accessable_attributes %w(title description tags image_id)
     readable_attributes %w(id state progress aspect_ratio_multiplier plays duration created_at updated_at account_id transcodings)

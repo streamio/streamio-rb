@@ -22,6 +22,12 @@ module Streamio
         parse_response(resource.get(:params => parameters))
       end
       
+      def resource_name(name)
+        define_singleton_method(:resource) do
+          RestClient::Resource.new("#{Streamio.authenticated_api_base}/#{name}", :headers => {:accept => :json})
+        end
+      end
+      
       def creatable_attributes(attributes = nil)
         return @creatable_attributes ||= [] if attributes.nil?
         
