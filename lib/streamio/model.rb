@@ -22,6 +22,16 @@ module Streamio
         parse_response(resource.get(:params => parameters))
       end
       
+      # Deletes model with the given id. Raises exception if failing to do so.
+      #
+      # @param [String] id The id of the model to delete.
+      #
+      # @return [Boolean] True if the delete request is successful.
+      def destroy(id)
+        resource[id].delete
+        true
+      end
+      
       def resource_name(name)
         define_singleton_method(:resource) do
           RestClient::Resource.new("#{Streamio.authenticated_api_base}/#{name}", :headers => {:accept => :json})

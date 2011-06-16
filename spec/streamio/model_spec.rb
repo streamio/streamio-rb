@@ -118,6 +118,22 @@ module Streamio
       end
     end
     
+    describe ".destroy" do
+      before(:each) do
+        stub_request(:delete, "#{Streamio.authenticated_api_base}/clips/4c8f810eb35ea84de000000c").
+          to_return(:status => 200)
+      end
+      
+      it "should run the delete request" do
+        Clip.destroy("4c8f810eb35ea84de000000c")
+        WebMock.should have_requested(:delete, "#{Streamio.authenticated_api_base}/clips/4c8f810eb35ea84de000000c")
+      end
+      
+      it "should be true" do
+        Clip.destroy("4c8f810eb35ea84de000000c").should == true
+      end
+    end
+    
     describe "#save" do
       # This does not work because the Payload is generated differently every time and some strange encoding troubles
       pending "should post creatable and accessable attributes when persisting" do
