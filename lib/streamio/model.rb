@@ -41,6 +41,15 @@ module Streamio
       end
     end
   
+    # Saves the model.
+    #
+    # If the model is new a record gets created in the database, otherwise
+    # the existing record gets updated.
+    #
+    # If +save+ fails it might be due to validation errors so you might want
+    # to check the model for +errors+ if +save+ returned +false+.
+    #
+    # @return [ Boolean ] Boolean indicating if the save / update was successful.
     def save
       if persisted?
         update
