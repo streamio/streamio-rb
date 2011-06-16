@@ -1,3 +1,7 @@
+== 0.5.1 2011-06-16
+
+* Added lots of (YARD style) documentation and updated README
+
 == 0.5.0 2011-06-15
 
 * Basic api functionality for Videos, Images and Encoding Profiles
