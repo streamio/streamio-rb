@@ -7,6 +7,7 @@ require "streamio/model"
 require "streamio/video"
 require "streamio/image"
 require "streamio/encoding_profile"
+require "streamio/upload"
 
 module Streamio
   class << self
