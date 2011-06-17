@@ -32,6 +32,18 @@ module Streamio
         true
       end
       
+      # Initializes a new model instance with the given attributes, saves it
+      # and returns it.
+      #
+      # @param [Hash] attributes The attributes to initialize the model with.
+      #
+      # @return [Model] The model after save has been called on it.
+      def create(attributes = {})
+        model = new(attributes)
+        model.save
+        model
+      end
+      
       def resource_name(name)
         define_singleton_method(:resource) do
           RestClient::Resource.new("#{Streamio.authenticated_api_base}/#{name}", :headers => {:accept => :json})

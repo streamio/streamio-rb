@@ -134,6 +134,15 @@ module Streamio
       end
     end
     
+    describe ".create" do
+      it "should save a new instance with given attributes and return it" do
+        clip_mock = mock(Clip)
+        clip_mock.should_receive(:save).and_return(true)
+        Clip.should_receive(:new).with(:some => "attributes").and_return(clip_mock)
+        Clip.create(:some => "attributes").should == clip_mock
+      end
+    end
+    
     describe "#save" do
       # This does not work because the Payload is generated differently every time and some strange encoding troubles
       pending "should post creatable and accessable attributes when persisting" do
