@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["David Backeus"]
   s.email       = ["david@streamio.se"]
   s.homepage    = "http://github.com/streamio/streamio-rb"
-  s.summary     = %q{Ruby wrapper for the Streamio api.}
-  s.description = %q{Ruby wrapper for Streamios api.}
+  s.summary     = %q{Ruby wrapper for the Streamio API.}
+  s.description = %q{Ruby wrapper for Streamios API.}
 
   s.files       = Dir.glob("lib/**/*") + %w(Gemfile streamio.gemspec HISTORY README.rdoc)
   
