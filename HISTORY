@@ -1,3 +1,11 @@
+== 0.6.0 2011-06-17
+
+* Model.create
+* Model.destroy
+* Model#reload
+* Video #add_transcoding and #delete_transcoding now reloads the video instance
+* Some refactoring behind the scenes
+
 == 0.5.1 2011-06-16
 
 * Added lots of (YARD style) documentation and updated README
