@@ -44,6 +44,18 @@ module Streamio
         model
       end
       
+      # Returns a count of number of models on your account filtered on the parameters your specify.
+      #
+      # @param [Hash] parameters The parameters will determine the conditions
+      # for the count. Refer to Streamio API reference for a list of valid
+      # parameters for each of the different models availible.
+      #
+      # @return [Integer] The number of models found.
+      def count(parameters = {})
+        sanitize_parameters(parameters)
+        JSON.parse(resource["count"].get(:params => parameters))["count"]
+      end
+      
       def resource_name(name)
         define_singleton_method(:resource) do
           RestClient::Resource.new("#{Streamio.authenticated_api_base}/#{name}", :headers => {:accept => :json})

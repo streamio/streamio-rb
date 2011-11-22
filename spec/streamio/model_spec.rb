@@ -143,6 +143,22 @@ module Streamio
       end
     end
     
+    describe ".count" do
+      it "should make a GET request to the count action and return results as an integer" do
+        stub_request(:get, "#{Streamio.authenticated_api_base}/clips/count").
+          to_return(:status => 200, :body => '{"count": 123}')
+        
+        Clip.count.should == 123
+      end
+      
+      it "should pass on parameters as query string" do
+        stub_request(:get, "#{Streamio.authenticated_api_base}/clips/count?tags=crazy,fruits").
+          to_return(:status => 200, :body => '{"count": 321}')
+        
+        Clip.count(:tags => ['crazy', 'fruits']).should == 321
+      end
+    end
+    
     describe "#save" do
       # This does not work because the Payload is generated differently every time and some strange encoding troubles
       pending "should post creatable and accessable attributes when persisting" do
