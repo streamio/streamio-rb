@@ -295,7 +295,7 @@ module Streamio
       
       it "should freeze the attributes" do
         @clip.destroy
-        expect { @clip.title = "New Title" }.to raise_error("can't modify frozen hash")
+        expect { @clip.title = "New Title" }.to raise_error(/frozen hash/i)
       end
       
       it "should be destroyed" do
