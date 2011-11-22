@@ -38,8 +38,11 @@ Use it.
   video.errors # {:file => ["can't be blank"]}
   video.file = File.new("my_awesome_video.mov")
   video.save # true
+  
+  Video.count # 23
+  Video.count(:tags => "Awesome") # 12
 
-Same principles work for the other availible models (Streamio::Image and Streamio::EncodingProfile).
+Same principles work for the other availible models (Image, EncodingProfile, Player, Playlist and Upload).
 
 == More Documentation
 
