@@ -6,6 +6,7 @@ require "streamio/version"
 require "streamio/model"
 require "streamio/video"
 require "streamio/image"
+require "streamio/playlist"
 require "streamio/encoding_profile"
 require "streamio/upload"
 
