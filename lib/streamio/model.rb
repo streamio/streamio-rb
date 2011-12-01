@@ -53,7 +53,7 @@ module Streamio
       # @return [Integer] The number of models found.
       def count(parameters = {})
         sanitize_parameters(parameters)
-        JSON.parse(resource["count"].get(:params => parameters))["count"]
+        MultiJson.decode(resource["count"].get(:params => parameters))["count"]
       end
       
       def resource_name(name)
@@ -103,7 +103,7 @@ module Streamio
       end
       
       def parse_response(response)
-        response = JSON.parse(response.body)
+        response = MultiJson.decode(response.body)
         if response.instance_of?(Array)
           response.collect do |attributes|
             new(attributes)
@@ -153,7 +153,7 @@ module Streamio
         persist
       end
     rescue RestClient::UnprocessableEntity => e
-      @errors = JSON.parse(e.response)
+      @errors = MultiJson.decode(e.response)
       false
     end
     
@@ -221,7 +221,7 @@ module Streamio
         parameters[key] = @attributes[key] if @attributes.has_key?(key)
       end
 
-      new_attributes = JSON.parse(self.class.resource.post(attributes).body)
+      new_attributes = MultiJson.decode(self.class.resource.post(attributes).body)
 
       (self.class.accessable_attributes + self.class.readable_attributes).each do |attribute|
         @attributes[attribute] = new_attributes[attribute]

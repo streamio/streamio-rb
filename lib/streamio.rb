@@ -1,5 +1,5 @@
 require "rest_client"
-require "json"
+require "multi_json"
 require "time"
 
 require "streamio/version"
