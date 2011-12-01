@@ -1,3 +1,7 @@
+# 0.9.0 2011-12-01
+
+* Use `multi_json` gem to handle JSON parsing for maximum backend compatibility.
+
 # 0.8.0 2011-11-22
 
 * Player model

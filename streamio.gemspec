@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Ruby wrapper for the Streamio API.}
   s.description = %q{Ruby wrapper for Streamios API.}
 
-  s.files       = Dir.glob("lib/**/*") + %w(Gemfile streamio.gemspec HISTORY README.rdoc)
+  s.files       = Dir.glob("lib/**/*") + %w(Gemfile streamio.gemspec HISTORY.md README.md)
   
   s.add_dependency("rest-client", "~> 1.6.1")
   s.add_dependency("multi_json", "~> 1.0.4")
