@@ -8,6 +8,7 @@ require "streamio/video"
 require "streamio/image"
 require "streamio/playlist"
 require "streamio/player"
+require "streamio/audio"
 require "streamio/encoding_profile"
 require "streamio/upload"
 
