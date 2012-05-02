@@ -1,3 +1,8 @@
+# 0.9.1 2012-05-02
+
+* Audio model
+* Bumped multi_json dependency version
+
 # 0.9.0 2011-12-01
 
 * Use `multi_json` gem to handle JSON parsing for maximum backend compatibility.
