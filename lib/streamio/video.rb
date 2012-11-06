@@ -3,7 +3,7 @@ module Streamio
     resource_name "videos"
     creatable_attributes %w(file encoding_profile_ids encoding_profile_tags skip_default_encoding_profiles use_original_as_transcoding)
     accessable_attributes %w(title description tags image_id)
-    readable_attributes %w(id state progress aspect_ratio_multiplier plays duration created_at updated_at account_id transcodings)
+    readable_attributes %w(id state progress aspect_ratio_multiplier plays duration created_at updated_at account_id transcodings original_video)
     
     # Adds a transcoding to the video instance and reloads itself to
     # reflect the changed transcodings array.

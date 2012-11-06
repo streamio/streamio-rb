@@ -24,7 +24,7 @@ module Streamio
     end
     
     it "should have certain readable attributes" do
-      Video.readable_attributes.should == %w(id state progress aspect_ratio_multiplier plays duration created_at updated_at account_id transcodings)
+      Video.readable_attributes.should == %w(id state progress aspect_ratio_multiplier plays duration created_at updated_at account_id transcodings original_video)
     end
     
     describe "#add_transcoding" do

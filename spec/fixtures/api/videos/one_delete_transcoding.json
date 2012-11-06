@@ -24,8 +24,8 @@
   "updated_at":"2010-03-04T15:00:50Z",
   "account_id": "4c50424cb35ea827c0000005",
   "progress": 1.0,
-  "original_movie": {
-    "http_uri": "d8bdb1x4b4k4w.cloudfront.net/original_movies/4c50424cb35ea827c0000005_4c8f8100b35ea84de0000002.wmv",
+  "original_video": {
+    "http_uri": "d8bdb1x4b4k4w.cloudfront.net/original_videos/4c50424cb35ea827c0000005_4c8f8100b35ea84de0000002.wmv",
     "size": 2308154
   },
   "tags": ["hd", "sweet"],
