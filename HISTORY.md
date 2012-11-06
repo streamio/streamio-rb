@@ -1,3 +1,7 @@
+# 0.9.2 2012-11-06
+
+* Video#original_video accessor
+
 # 0.9.1 2012-05-02
 
 * Audio model
