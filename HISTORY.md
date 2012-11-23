@@ -1,3 +1,8 @@
+# 1.0.1 2012-11-23
+
+* Loosend multi_json dependency version to conform with other ruby gems.
+* Updated some development dependencies.
+
 # 1.0.0 2012-11-23
 
 * Replaced rest-client dependency with httpclient to support large file uploads.
