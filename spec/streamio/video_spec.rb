@@ -12,7 +12,7 @@ module Streamio
     end
     
     it "should use the videos resource" do
-      Video.resource.url.should == "#{Streamio.authenticated_api_base}/videos"
+      Video.resource.name.should == "videos"
     end
     
     it "should have certain creatable attributes" do

@@ -7,7 +7,7 @@ module Streamio
     end
     
     it "should use the uploads resource" do
-      Upload.resource.url.should == "#{Streamio.authenticated_api_base}/uploads"
+      Upload.resource.name.should == "uploads"
     end
     
     it "should have certain creatable attributes" do

@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
 
   s.files       = Dir.glob("lib/**/*") + %w(Gemfile streamio.gemspec HISTORY.md README.md)
   
-  s.add_dependency("rest-client", "~> 1.6.1")
+  s.add_dependency("httpclient", "~> 2.3.0")
   s.add_dependency("multi_json", "~> 1.3.0")
   
   s.add_development_dependency("rspec", "~> 2.7")

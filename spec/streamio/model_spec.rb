@@ -198,7 +198,7 @@ module Streamio
         @clip.save
         
         WebMock.should have_requested(:put, "#{Streamio.authenticated_api_base}/clips/#{@clip.id}").
-          with(:body => RestClient::Payload.generate(attributes).to_s)
+          with(:body => "title=New+Title&description=New+%3D+Description&tags=new&tags=tags")
       end
       
       context "unpersisted with valid attributes" do

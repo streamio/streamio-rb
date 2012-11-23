@@ -14,11 +14,9 @@ module Streamio
     #
     # @return [Boolean] Indicating wether the transcoding was successfully created.
     def add_transcoding(parameters)
-      self.class.resource["#{id}/transcodings"].post(parameters)
+      response = self.class.resource.post("#{id}/transcodings", parameters)
       reload
-      true
-    rescue RestClient::Exception
-      false
+      response.status == 201
     end
     
     # Deletes a transcoding from the video and reloads itself to
@@ -28,11 +26,9 @@ module Streamio
     #
     # @return [Boolean] Indicating wether the transcoding was successfully deleted.
     def delete_transcoding(transcoding_id)
-      self.class.resource["#{id}/transcodings/#{transcoding_id}"].delete
+      response = self.class.resource.delete("#{id}/transcodings/#{transcoding_id}")
       reload
-      true
-    rescue RestClient::Exception
-      false
+      response.status == 200
     end
   end
 end

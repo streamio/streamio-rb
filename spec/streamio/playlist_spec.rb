@@ -7,7 +7,7 @@ module Streamio
     end
     
     it "should use the playlists resource" do
-      Playlist.resource.url.should == "#{Streamio.authenticated_api_base}/playlists"
+      Playlist.resource.name.should == "playlists"
     end
     
     it "should have certain creatable attributes" do

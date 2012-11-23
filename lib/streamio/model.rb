@@ -7,7 +7,7 @@ module Streamio
       #
       # @return [Model] The found model.
       def find(id)
-        parse_response(resource["#{id}"].get)
+        parse_response(resource.get(id))
       end
       
       # Querys for a list of models.
@@ -19,7 +19,8 @@ module Streamio
       # @return [Array] Array of found models.
       def all(parameters = {})
         sanitize_parameters(parameters)
-        parse_response(resource.get(:params => parameters))
+        response = resource.get(nil, parameters)
+        parse_response(response)
       end
       
       # Deletes model with the given id. Raises exception if failing to do so.
@@ -28,7 +29,7 @@ module Streamio
       #
       # @return [Boolean] True if the delete request is successful.
       def destroy(id)
-        resource[id].delete
+        resource.delete(id)
         true
       end
       
@@ -53,12 +54,13 @@ module Streamio
       # @return [Integer] The number of models found.
       def count(parameters = {})
         sanitize_parameters(parameters)
-        MultiJson.decode(resource["count"].get(:params => parameters))["count"]
+        response = resource.get("count", parameters)
+        MultiJson.decode(response.body)["count"]
       end
       
       def resource_name(name)
         define_singleton_method(:resource) do
-          RestClient::Resource.new("#{Streamio.authenticated_api_base}/#{name}", :headers => {:accept => :json})
+          Resource.new(name)
         end
       end
       
@@ -152,9 +154,6 @@ module Streamio
       else  
         persist
       end
-    rescue RestClient::UnprocessableEntity => e
-      @errors = MultiJson.decode(e.response)
-      false
     end
     
     # Deletes the record and freezes this instance to reflect that no changes
@@ -162,7 +161,7 @@ module Streamio
     #
     # @return [Boolean] True if the record was deleted.
     def destroy
-      self.class.resource[id].delete
+      self.class.resource.delete(id)
       @attributes.freeze
       true
     end
@@ -211,8 +210,11 @@ module Streamio
         parameters[key] = @attributes[key] if @attributes.has_key?(key)
       end
 
-      self.class.resource[id].put(parameters)
-      true
+      response = self.class.resource.put(id, parameters)
+
+      @errors = MultiJson.decode(response.body) unless response.status == 200
+
+      response.status == 200
     end
     
     def persist
@@ -221,12 +223,16 @@ module Streamio
         parameters[key] = @attributes[key] if @attributes.has_key?(key)
       end
 
-      new_attributes = MultiJson.decode(self.class.resource.post(attributes).body)
+      response = self.class.resource.post(nil, parameters)
+      json = MultiJson.decode(response.body)
 
       (self.class.accessable_attributes + self.class.readable_attributes).each do |attribute|
-        @attributes[attribute] = new_attributes[attribute]
+        @attributes[attribute] = json[attribute]
       end
-      true
+
+      @errors = json unless response.status == 201
+
+      response.status == 201
     end
   end
 end

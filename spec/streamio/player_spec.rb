@@ -12,7 +12,7 @@ module Streamio
     end
     
     it "should use the players resource" do
-      Player.resource.url.should == "#{Streamio.authenticated_api_base}/players"
+      Player.resource.name.should == "players"
     end
     
     it "should have certain creatable attributes" do

@@ -1,8 +1,9 @@
-require "rest_client"
+require "httpclient"
 require "multi_json"
 require "time"
 
 require "streamio/version"
+require "streamio/resource"
 require "streamio/model"
 require "streamio/video"
 require "streamio/image"

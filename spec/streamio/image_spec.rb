@@ -12,7 +12,7 @@ module Streamio
     end
     
     it "should use the images resource" do
-      Image.resource.url.should == "#{Streamio.authenticated_api_base}/images"
+      Image.resource.name.should == "images"
     end
     
     it "should have certain creatable attributes" do

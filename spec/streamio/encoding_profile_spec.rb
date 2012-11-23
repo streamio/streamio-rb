@@ -12,7 +12,7 @@ module Streamio
     end
     
     it "should use the encoding_profiles resource" do
-      EncodingProfile.resource.url.should == "#{Streamio.authenticated_api_base}/encoding_profiles"
+      EncodingProfile.resource.name.should == "encoding_profiles"
     end
     
     it "should have certain creatable attributes" do
