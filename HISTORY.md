@@ -1,3 +1,7 @@
+# 1.0.0 2012-11-23
+
+* Replaced rest-client dependency with httpclient to support large file uploads.
+
 # 0.9.2 2012-11-06
 
 * Video#original_video accessor
