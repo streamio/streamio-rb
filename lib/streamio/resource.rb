@@ -4,30 +4,55 @@ module Streamio
 
     def initialize(name)
       @name = name
-      @client = HTTPClient.new
-      @client.set_auth("#{Streamio.protocol}#{Streamio.host}", Streamio.username, Streamio.password)
+      @resource_path = "/api/v1/#{@name}"
+
+      uri = URI.parse(Streamio.protocol+Streamio.host)
+      @net = Net::HTTP.new(uri.host, uri.port)
+      @net.use_ssl = Streamio.use_ssl
     end
 
     def get(path, parameters = {})
-      @client.get(url_for(path), parameters.empty? ? nil : parameters)
+      @net.request(net_request(Net::HTTP::Get, path, parameters))
     end
 
     def post(path, parameters = {})
-      @client.post(url_for(path), parameters)
+      request_class = parameters.any? do |key, value|
+        value.is_a?(File)
+      end ? Net::HTTP::Post::Multipart : Net::HTTP::Post
+
+      @net.request(net_request(request_class, path, parameters))
     end
 
     def put(path, parameters = {})
-      @client.put(url_for(path), parameters)
+      @net.request(net_request(Net::HTTP::Put, path, parameters))
     end
 
     def delete(path)
-      @client.delete(url_for(path))
+      @net.request(net_request(Net::HTTP::Delete, path))
     end
 
     private
-    def url_for(path = nil)
-      suffix = path ? "/#{path}" : ""
-      "#{Streamio.authenticated_api_base}/#{@name}#{suffix}"
+    def net_request(request_class, sub_path, parameters = {})
+      path = @resource_path
+      path << "/#{sub_path}" if sub_path
+
+      if request_class == Net::HTTP::Get
+        path << "?#{Rack::Utils.build_query(parameters)}" unless parameters.empty?
+        req = request_class.new(path)
+      elsif request_class == Net::HTTP::Post::Multipart
+        parameters.each do |key, value|
+          parameters[key] = UploadIO.new(value, "application/octet-stream", File.basename(value.path)) if value.is_a?(File)
+          parameters[key] = value.join(", ") if value.is_a?(Array)
+        end
+        req = request_class.new(path, parameters)
+      else
+        req = request_class.new(path)
+        req.body = Rack::Utils.build_query(parameters)
+      end
+
+      req.basic_auth(Streamio.username, Streamio.password)
+      req["Accept"] = "application/json"
+      req
     end
   end
 end

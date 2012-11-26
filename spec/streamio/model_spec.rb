@@ -160,18 +160,16 @@ module Streamio
     end
     
     describe "#save" do
-      # This does not work because the Payload is generated differently every time and some strange encoding troubles
-      pending "should post creatable and accessable attributes when persisting" do
+      # Difficult to spec since multipart body is generated differently every time
+      pending "should post files as multipart and fix arrays when files are included" do
         attributes = { :title => "Awesome",
                        :description => "An awesome clip",
-                       :file => File.new("#{fixture_path}/awesome.mov"),
+                       :file => File.open("#{fixture_path}/awesome.mov", "rb"),
                        :tags => ["one", "two"] }
         
         stub_request(:post, "#{Streamio.authenticated_api_base}/clips").
-          with(:body => RestClient::Payload.generate(attributes).to_s).
+          with(:body => "").
           to_return(:body => File.read("#{fixture_path}/api/clips/one.json"), :status => 201)
-        
-        attributes[:file] = File.new("#{fixture_path}/awesome.mov")
         
         clip = Clip.new(attributes)
         clip.save
@@ -182,22 +180,22 @@ module Streamio
         stub_request(:get, "#{Streamio.authenticated_api_base}/clips/4c8f810eb35ea84de000000c").
           to_return(:body => File.read("#{fixture_path}/api/clips/one.json"), :status => 200)
         
-        @clip = Clip.find("4c8f810eb35ea84de000000c")
+        clip = Clip.find("4c8f810eb35ea84de000000c")
         
         attributes = { :title => "New Title",
                        :description => "New Description",
                        :tags => ["new", "tags"] }
         
         attributes.each do |key, value|
-          @clip.send("#{key}=", value)
+          clip.send("#{key}=", value)
         end
         
-        stub_request(:put, "#{Streamio.authenticated_api_base}/clips/#{@clip.id}").
-          to_return(:status => 200)
+        stub_request(:put, "#{Streamio.authenticated_api_base}/clips/#{clip.id}").
+          to_return(:status => 204)
           
-        @clip.save
+        clip.save
         
-        WebMock.should have_requested(:put, "#{Streamio.authenticated_api_base}/clips/#{@clip.id}").
+        WebMock.should have_requested(:put, "#{Streamio.authenticated_api_base}/clips/#{clip.id}").
           with(:body => "title=New+Title&description=New+Description&tags=new&tags=tags")
       end
       
@@ -261,7 +259,7 @@ module Streamio
           @clip = Clip.find("4c8f810eb35ea84de000000c")
           
           stub_request(:put, "#{Streamio.authenticated_api_base}/clips/#{@clip.id}").
-            to_return(:status => 200)
+            to_return(:status => 204)
         end
         
         it "should be true" do

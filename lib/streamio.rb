@@ -1,4 +1,6 @@
-require "httpclient"
+require "rack"
+require "net/https"
+require "net/http/post/multipart"
 require "multi_json"
 require "time"
 

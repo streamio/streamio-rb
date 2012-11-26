@@ -212,9 +212,9 @@ module Streamio
 
       response = self.class.resource.put(id, parameters)
 
-      @errors = MultiJson.decode(response.body) unless response.status == 200
+      @errors = MultiJson.decode(response.body) unless response.code.to_i == 204
 
-      response.status == 200
+      response.code.to_i == 204
     end
     
     def persist
@@ -230,9 +230,9 @@ module Streamio
         @attributes[attribute] = json[attribute]
       end
 
-      @errors = json unless response.status == 201
+      @errors = json unless response.code.to_i == 201
 
-      response.status == 201
+      response.code.to_i == 201
     end
   end
 end

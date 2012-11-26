@@ -16,7 +16,7 @@ module Streamio
     def add_transcoding(parameters)
       response = self.class.resource.post("#{id}/transcodings", parameters)
       reload
-      response.status == 201
+      response.code.to_i == 201
     end
     
     # Deletes a transcoding from the video and reloads itself to
@@ -28,7 +28,7 @@ module Streamio
     def delete_transcoding(transcoding_id)
       response = self.class.resource.delete("#{id}/transcodings/#{transcoding_id}")
       reload
-      response.status == 200
+      response.code.to_i == 200
     end
   end
 end
