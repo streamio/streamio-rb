@@ -1,3 +1,7 @@
+# 1.0.2 2012-11-26
+
+* Replaced httpclient with net/http + multipart-post to avoid timeouts on file posting.
+
 # 1.0.1 2012-11-23
 
 * Loosend multi_json dependency version to conform with other ruby gems.
