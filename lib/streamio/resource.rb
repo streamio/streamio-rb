@@ -12,7 +12,7 @@ module Streamio
     end
 
     def get(path, parameters = {})
-      @net.request(net_request(Net::HTTP::Get, path, parameters))
+      validate_and_return @net.request(net_request(Net::HTTP::Get, path, parameters))
     end
 
     def post(path, parameters = {})
@@ -20,15 +20,15 @@ module Streamio
         value.is_a?(File)
       end ? Net::HTTP::Post::Multipart : Net::HTTP::Post
 
-      @net.request(net_request(request_class, path, parameters))
+      validate_and_return @net.request(net_request(request_class, path, parameters))
     end
 
     def put(path, parameters = {})
-      @net.request(net_request(Net::HTTP::Put, path, parameters))
+      validate_and_return @net.request(net_request(Net::HTTP::Put, path, parameters))
     end
 
     def delete(path)
-      @net.request(net_request(Net::HTTP::Delete, path))
+      validate_and_return @net.request(net_request(Net::HTTP::Delete, path))
     end
 
     private
@@ -53,6 +53,11 @@ module Streamio
       req.basic_auth(Streamio.username, Streamio.password)
       req["Accept"] = "application/json"
       req
+    end
+
+    def validate_and_return(response)
+      raise Errors::Unauthorized if response.code.to_i == 401
+      response
     end
   end
 end

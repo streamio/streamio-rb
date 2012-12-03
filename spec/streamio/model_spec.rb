@@ -70,7 +70,7 @@ module Streamio
     it "should not be destroyed by default" do
       Clip.new.should_not be_destroyed
     end
-    
+
     describe ".find" do
       context "with an existing clip" do
         before(:each) do
@@ -92,6 +92,17 @@ module Streamio
         
         it "should be persisted" do
           @clip.should be_persisted
+        end
+      end
+
+      context "with unauthorized username/password" do
+        before(:each) do
+          stub_request(:get, "#{Streamio.authenticated_api_base}/clips/4c8f810eb35ea84de000000c").
+            to_return(:status => 401)
+        end
+
+        it "should raise Streamio::Errors::Unauthorized" do
+          expect { Clip.find("4c8f810eb35ea84de000000c") }.to raise_error(Streamio::Errors::Unauthorized)
         end
       end
     end
@@ -116,6 +127,17 @@ module Streamio
         clips.length.should == 2
         clips.collect(&:class).uniq.should == [Clip]
       end
+
+      context "with unauthorized username/password" do
+        before(:each) do
+          stub_request(:get, "#{Streamio.authenticated_api_base}/clips").
+            to_return(:status => 401)
+        end
+
+        it "should raise Streamio::Errors::Unauthorized" do
+          expect { Clip.all }.to raise_error(Streamio::Errors::Unauthorized)
+        end
+      end
     end
     
     describe ".destroy" do
@@ -131,6 +153,17 @@ module Streamio
       
       it "should be true" do
         Clip.destroy("4c8f810eb35ea84de000000c").should == true
+      end
+
+      context "with unauthorized username/password" do
+        before(:each) do
+          stub_request(:delete, "#{Streamio.authenticated_api_base}/clips/4c8f810eb35ea84de000000c").
+            to_return(:status => 401)
+        end
+
+        it "should raise Streamio::Errors::Unauthorized" do
+          expect { Clip.destroy("4c8f810eb35ea84de000000c") }.to raise_error(Streamio::Errors::Unauthorized)
+        end
       end
     end
     
@@ -156,6 +189,17 @@ module Streamio
           to_return(:status => 200, :body => '{"count": 321}')
         
         Clip.count(:tags => ['crazy', 'fruits']).should == 321
+      end
+
+      context "with unauthorized username/password" do
+        before(:each) do
+          stub_request(:get, "#{Streamio.authenticated_api_base}/clips/count").
+            to_return(:status => 401)
+        end
+
+        it "should raise Streamio::Errors::Unauthorized" do
+          expect { Clip.count }.to raise_error(Streamio::Errors::Unauthorized)
+        end
       end
     end
     
@@ -285,6 +329,33 @@ module Streamio
         it "should make validation errors availible" do
           @clip.save
           @clip.errors.should == {"title" => ["can't be blank"]}
+        end
+      end
+
+      context "peristed with unauthorized username/password" do
+        before(:each) do
+          stub_request(:get, "#{Streamio.authenticated_api_base}/clips/4c8f810eb35ea84de000000c").
+            to_return(:body => File.read("#{fixture_path}/api/clips/one.json"), :status => 200)
+
+          @clip = Clip.find("4c8f810eb35ea84de000000c")
+
+          stub_request(:put, "#{Streamio.authenticated_api_base}/clips/#{@clip.id}").
+            to_return(:status => 401)
+        end
+
+        it "should raise Streamio::Errors::Unauthorized" do
+          expect { @clip.save }.to raise_error(Streamio::Errors::Unauthorized)
+        end
+      end
+
+      context "unpersisted with unauthorized username/password" do
+        before(:each) do
+          stub_request(:post, "#{Streamio.authenticated_api_base}/clips").
+            to_return(:status => 401)
+        end
+
+        it "should raise Streamio::Errors::Unauthorized" do
+          expect { Clip.new.save }.to raise_error(Streamio::Errors::Unauthorized)
         end
       end
     end

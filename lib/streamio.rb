@@ -5,6 +5,7 @@ require "multi_json"
 require "time"
 
 require "streamio/version"
+require "streamio/errors"
 require "streamio/resource"
 require "streamio/model"
 require "streamio/video"
