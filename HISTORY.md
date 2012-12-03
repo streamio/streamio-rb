@@ -1,3 +1,7 @@
+# 1.0.3 2012-12-03
+
+* Fix ruby 1.8 compatability by avoiding use of define_singleton_method.
+
 # 1.0.2 2012-11-26
 
 * Replaced httpclient with net/http + multipart-post to avoid timeouts on file posting.
