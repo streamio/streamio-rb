@@ -1,3 +1,7 @@
+# 1.0.4 2012-12-03
+
+* Add proper handling of authorization by raising Streamio::Errors::Unauthorized when using wrong username/password.
+
 # 1.0.3 2012-12-03
 
 * Fix ruby 1.8 compatability by avoiding use of define_singleton_method.
