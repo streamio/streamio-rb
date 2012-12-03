@@ -1,3 +1,7 @@
+# 1.0.6 2012-12-03
+
+* Add configuration option for skipping ssl verification (might be useful for newbies on Windows getting OpenSSL errors).
+
 # 1.0.4 2012-12-03
 
 * Add proper handling of authorization by raising Streamio::Errors::Unauthorized when using wrong username/password.
