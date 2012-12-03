@@ -59,11 +59,13 @@ module Streamio
       end
       
       def resource_name(name)
-        define_singleton_method(:resource) do
-          Resource.new(name)
-        end
+        @resource_name = name
       end
       
+      def resource
+        Resource.new(@resource_name)
+      end
+
       def creatable_attributes(attributes = nil)
         return @creatable_attributes ||= [] if attributes.nil?
         
