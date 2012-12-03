@@ -26,6 +26,7 @@ Configure it.
 Streamio.configure do |config|
   config.username = "your_account_name"
   config.password = "your_api_private_key"
+  # config.skip_ssl_verification = true # can be used if you can't escape OpenSSL::SSL::SSLError
 end
 ```
 

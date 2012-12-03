@@ -21,6 +21,7 @@ module Streamio
     attr_accessor :username
     attr_accessor :password
     attr_accessor :use_ssl
+    attr_accessor :skip_ssl_verification
     attr_accessor :host
     
     # The idiomatic configure block for the Streamio gem. Basically a shortcut

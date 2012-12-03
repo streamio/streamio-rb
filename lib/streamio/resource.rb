@@ -9,6 +9,7 @@ module Streamio
       uri = URI.parse(Streamio.protocol+Streamio.host)
       @net = Net::HTTP.new(uri.host, uri.port)
       @net.use_ssl = Streamio.use_ssl
+      @net.verify_mode = OpenSSL::SSL::VERIFY_NONE if Streamio.skip_ssl_verification
     end
 
     def get(path, parameters = {})
