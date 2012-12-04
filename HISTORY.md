@@ -1,3 +1,7 @@
+# 1.0.7 2012-12-04
+
+* Add Audio#original_file.
+
 # 1.0.6 2012-12-03
 
 * Add configuration option for skipping ssl verification (might be useful for newbies on Windows getting OpenSSL errors).
