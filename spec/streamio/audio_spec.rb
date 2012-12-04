@@ -24,7 +24,7 @@ module Streamio
     end
     
     it "should have certain readable attributes" do
-      Audio.readable_attributes.should == %w(id state progress plays duration created_at updated_at account_id transcodings)
+      Audio.readable_attributes.should == %w(id state progress plays duration created_at updated_at account_id transcodings original_file)
     end
   end
 end
