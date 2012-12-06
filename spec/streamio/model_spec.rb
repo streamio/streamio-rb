@@ -219,16 +219,15 @@ module Streamio
         clip.save
       end
       
-      # This spec passes but only on Ruby 1.9 because of the non random hash order
       it "should put accessable attributes when updating" do
         stub_request(:get, "#{Streamio.authenticated_api_base}/clips/4c8f810eb35ea84de000000c").
           to_return(:body => File.read("#{fixture_path}/api/clips/one.json"), :status => 200)
         
         clip = Clip.find("4c8f810eb35ea84de000000c")
         
-        attributes = { :title => "New Title",
-                       :description => "New Description",
-                       :tags => ["new", "tags"] }
+        attributes = { 'title' => "New Title",
+                       'description' => "New Description",
+                       'tags' => ["new", "tags"] }
         
         attributes.each do |key, value|
           clip.send("#{key}=", value)
@@ -239,8 +238,10 @@ module Streamio
           
         clip.save
         
-        WebMock.should have_requested(:put, "#{Streamio.authenticated_api_base}/clips/#{clip.id}").
-          with(:body => "title=New+Title&description=New+Description&tags=new&tags=tags")
+        a_request(:put, "#{Streamio.authenticated_api_base}/clips/#{clip.id}").with do |request|
+          parameters = Rack::Utils.parse_query(request.body)
+          parameters == attributes
+        end.should have_been_made
       end
       
       context "unpersisted with valid attributes" do
@@ -380,7 +381,7 @@ module Streamio
       
       it "should freeze the attributes" do
         @clip.destroy
-        expect { @clip.title = "New Title" }.to raise_error(/frozen hash/i)
+        expect { @clip.title = "New Title" }.to raise_error(/frozen/i)
       end
       
       it "should be destroyed" do
