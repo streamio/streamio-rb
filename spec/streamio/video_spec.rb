@@ -16,7 +16,7 @@ module Streamio
     end
     
     it "should have certain creatable attributes" do
-      Video.creatable_attributes.should == %w(file encoding_profile_ids encoding_profile_tags skip_default_encoding_profiles use_original_as_transcoding)
+      Video.creatable_attributes.should == %w(file encoding_profile_ids encoding_profile_tags skip_default_encoding_profiles use_original_as_transcoding automatic_encoding)
     end
     
     it "should have certain accessable attributes" do
