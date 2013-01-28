@@ -1,3 +1,7 @@
+# 1.0.8 2013-01-28
+
+* Allow automatic_encoding variable to be set for video uploads.
+
 # 1.0.7 2012-12-04
 
 * Add Audio#original_file.
